@@ -47,26 +47,6 @@ vars:
 
 Parameters `parent_app` and `parent_app_env` are used to define the parent application and its environment for each child application. This allows you to create a hierarchy where the bootstrap application manages the deployment of other applications.
 
----
-
-## 🧩 Rendered Manifest Pattern
-
-The [Rendered Manifest Pattern](https://www.youtube.com/watch?v=TonN-369Qfo) addresses common challenges of using Helm or Kustomize directly inside ArgoCD.
-
-### The problem with in-cluster rendering
-- Version drift between clusters or plugin versions
-- Difficult debugging, since you don’t see the rendered YAML
-- Diffs in Git don’t reflect the actual resources being applied
-- No easy way to run linters or policy checks on manifests before deploy
-
-### How `make-argocd-fly` solves it
-- Renders all templates **ahead of time**, outside the cluster
-- Stores the rendered manifests in Git, per environment
-- Generates ArgoCD `Application` resources that point only to plain YAML
-- Ensures that what you review in Git is exactly what gets deployed
-
-By adopting this pattern with `make-argocd-fly`, you get a workflow that is **deterministic, auditable, and CI/CD friendly**, while keeping ArgoCD focused purely on syncing Kubernetes manifests.
-
 ## Local vs ArgoCD
 
 | Capability | Local (kubectl) | ArgoCD |
@@ -77,4 +57,4 @@ By adopting this pattern with `make-argocd-fly`, you get a workflow that is **de
 | Works offline | ✅ | ❌ |
 | Best for | quick local testing | managed GitOps in clusters |
 
-For real environments (`dev`, `staging`, `prod`), define separate environments and (optionally) `parent_app` relations to generate ArgoCD `Application` CRs. For `local`, deploy the rendered YAML via `kubectl`.
+For real environments (`dev`, `staging`, `prod`), define separate environments and (optionally) `parent_app` relations to generate ArgoCD `Application` CRs. For `local`, deploy the rendered YAML files via `kubectl`.
